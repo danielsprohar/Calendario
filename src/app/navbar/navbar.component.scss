@@ -1,0 +1,64 @@
+.navbar {
+  max-height: 64px;
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  background-color: teal;
+  color: white;
+}
+
+.topnav {
+  max-height: 64px;
+  background: #fff;
+  color: #000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+}
+
+.app-name {
+  font-size: 22px;
+  line-height: 24px;
+  margin-right: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: inherit;
+}
+
+.app-name:link {
+  text-decoration: none;
+}
+
+.app-name:visited {
+  text-decoration: none;
+}
+
+.app-name:hover {
+  text-decoration: none;
+}
+
+.app-name:active {
+  text-decoration: none;
+}
+
+.current-date {
+  margin-left: 0.5rem;
+}
+
+.view-options-container {
+  border-radius: 4px;
+  border: 1px solid #000;
+}
+
+.drop-down-button {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 0 0 0 8px;
+}
+
+.today-button {
+  margin: 0 1rem 0 2rem;
+  border-color: #000;
+}

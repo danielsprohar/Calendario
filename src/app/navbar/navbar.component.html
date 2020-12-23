@@ -1,0 +1,86 @@
+<mat-toolbar class="topnav">
+  <a routerLink="/calendar/week" class="app-name">Calendario</a>
+  <ng-container *ngIf="calendar.getDateAsObservable() | async as currentDate">
+    <!-- ====================================== -->
+    <!-- Today button -->
+    <!-- ====================================== -->
+    <button
+      mat-stroked-button
+      class="today-button"
+      matTooltip="{{ todayTooltip }}"
+      (click)="renderCurrentDate()"
+    >
+      Today
+    </button>
+
+    <!-- ====================================== -->
+    <!-- Action buttons -->
+    <!-- ====================================== -->
+
+    <ng-container
+      *ngIf="calendar.isMonthViewAsObservable() | async; else weekView"
+    >
+      <button
+        mat-icon-button
+        matTooltip="Previous month"
+        (click)="renderPreviousMonth()"
+      >
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        matTooltip="Next month"
+        (click)="renderNextMonth()"
+      >
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </ng-container>
+
+    <ng-template #weekView>
+      <button
+        mat-icon-button
+        matTooltip="Previous week"
+        (click)="renderPreviousWeek()"
+      >
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Next week" (click)="renderNextWeek()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </ng-template>
+
+    <!-- ====================================== -->
+    <!-- Current Date -->
+    <!-- ====================================== -->
+    <div class="row">
+      <span id="date" class="current-date">
+        {{ currentDate | date: "MMMM yyyy" }}
+      </span>
+    </div>
+
+    <span class="spacer"></span>
+
+    <!-- ====================================== -->
+    <!-- Menu -->
+    <!-- ====================================== -->
+    <div class="view-options-container">
+      <button
+        mat-button
+        [matMenuTriggerFor]="viewMenu"
+        class="drop-down-button"
+      >
+        <span>{{ view?.value | titlecase }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #viewMenu>
+        <ng-container *ngFor="let view of views">
+          <button mat-menu-item (click)="handleViewChange(view)">
+            {{ view | titlecase }}
+          </button>
+        </ng-container>
+      </mat-menu>
+    </div>
+  </ng-container>
+</mat-toolbar>
