@@ -351,7 +351,7 @@ export class CalendarService {
    * the final week of the month.
    */
   public isLastWeekOfMonth(): boolean {
-    const currentDate = new Date(this.dateSubject.value);
+    const currentDate = this.getFirstDateOfWeek(this.dateSubject.value);
     const nextWeekDate = new Date(currentDate.getTime() + millisecondsPerWeek);
     return currentDate.getMonth() !== nextWeekDate.getMonth();
   }
@@ -361,7 +361,7 @@ export class CalendarService {
    * the final week of the year.
    */
   public isLastWeekOfYear(): boolean {
-    const currentDate = new Date(this.dateSubject.value);
+    const currentDate = this.getFirstDateOfWeek(this.dateSubject.value);
     const nextWeekDate = new Date(currentDate.getTime() + millisecondsPerWeek);
     return currentDate.getFullYear() !== nextWeekDate.getFullYear();
   }

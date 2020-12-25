@@ -43,8 +43,12 @@
   text-decoration: none;
 }
 
-.current-date {
+.date {
   margin-left: 0.5rem;
+  color: #3c4043;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-weight: 400;
+  white-space: nowrap;
 }
 
 .view-options-container {
