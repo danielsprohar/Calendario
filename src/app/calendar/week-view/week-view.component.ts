@@ -1,24 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WeekViewBuilder } from '../builders/week-view-builder';
+import { WeekViewRenderer } from '../renders/week-view-renderer';
 import { CalendarService } from '../services/calendar.service';
 
 @Component({
   selector: 'app-week-view',
   templateUrl: './week-view.component.html',
   styleUrls: ['./week-view.component.scss'],
-  providers: [WeekViewBuilder],
+  providers: [WeekViewRenderer],
 })
 export class WeekViewComponent implements OnInit {
   constructor(
     private readonly calendar: CalendarService,
-    private readonly vb: WeekViewBuilder,
+    private readonly view: WeekViewRenderer,
     private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.vb.renderTimezoneOffset();
-    this.vb.renderHeader();
-    this.vb.renderCalendar();
+    this.view.renderTimezoneOffset();
+    this.view.renderHeader();
+    this.view.renderCalendar();
   }
 }
