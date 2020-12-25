@@ -33,6 +33,13 @@ export class CalendarService {
     return this.dateSubject.value;
   }
 
+  /**
+   * Sets the underlying `date` value with the date provided.
+   *
+   * NOTE: The time segments are ignored.
+   * In other words, only the `year`, `month`, and `date` values are used.
+   * @param date The new date
+   */
   public setDate(date: Date): void {
     this.dateSubject.next(
       new Date(date.getFullYear(), date.getMonth(), date.getDate())

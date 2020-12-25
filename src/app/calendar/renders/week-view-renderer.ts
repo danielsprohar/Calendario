@@ -8,6 +8,10 @@ import {
 
 @Injectable()
 export class WeekViewRenderer {
+  private readonly hourFormatter = new Intl.DateTimeFormat('defualt', {
+    hour: 'numeric',
+  });
+
   private readonly weekdayFormatter = new Intl.DateTimeFormat('default', {
     weekday: 'short',
   });
@@ -46,24 +50,26 @@ export class WeekViewRenderer {
    * Render the weekdays (e.g., Sun, Mon, etc.)
    * and the current days in numeric format (e.g., 1, 2, 3, etc.).
    */
-  renderHeader(): void {
-    const date = this.calendar.getFirstDateOfWeek();
+  renderHeader(date: Date = new Date()): void {
+    const d = this.calendar.getFirstDateOfWeek(date);
     const weekdays = document.querySelectorAll('.weekday');
     const days = document.querySelectorAll('.day');
 
     for (let i = 0; i < daysPerWeek; i++) {
-      weekdays.item(i).textContent = this.weekdayFormatter.format(date);
+      weekdays.item(i).textContent = this.weekdayFormatter.format(d);
       const day = days.item(i);
-      day.textContent = `${date.getDate()}`;
-      day.setAttribute('aria-label', this.ariaLabelFormatter.format(date));
-      date.setDate(date.getDate() + 1);
+      day.textContent = `${d.getDate()}`;
+      day.setAttribute('aria-label', this.ariaLabelFormatter.format(d));
+      d.setDate(d.getDate() + 1);
     }
   }
 
   /**
-   * Renders the css grid for the calendar content.
+   * Initializes the css grid for the calendar content.
+   *
+   * NOTE: This method should only be called *once*.
    */
-  renderCalendar(): void {
+  initCalendar(): void {
     const calendar = document.getElementById('calendar');
     if (!calendar) {
       throw new Error('HTMLElement with id "calendar" is not definend');
@@ -71,7 +77,7 @@ export class WeekViewRenderer {
 
     const aux = new Date();
     const date = new Date(aux.getFullYear(), aux.getMonth(), aux.getDate());
-    const formatter = new Intl.DateTimeFormat('default', { hour: 'numeric' });
+    const formatter = this.hourFormatter;
 
     for (let hour = 0; hour < hoursPerDay; hour++) {
       date.setHours(hour);
@@ -86,4 +92,6 @@ export class WeekViewRenderer {
       }
     }
   }
+
+  updateCalendar(date: Date): void {}
 }

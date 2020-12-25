@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { WeekViewBuilder } from '../builders/week-view-builder';
+import { Subscription } from 'rxjs';
 import { WeekViewRenderer } from '../renders/week-view-renderer';
 import { CalendarService } from '../services/calendar.service';
 
@@ -10,7 +10,9 @@ import { CalendarService } from '../services/calendar.service';
   styleUrls: ['./week-view.component.scss'],
   providers: [WeekViewRenderer],
 })
-export class WeekViewComponent implements OnInit {
+export class WeekViewComponent implements OnInit, OnDestroy {
+  private dateSubscription: Subscription;
+
   constructor(
     private readonly calendar: CalendarService,
     private readonly view: WeekViewRenderer,
@@ -19,7 +21,18 @@ export class WeekViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.view.renderTimezoneOffset();
-    this.view.renderHeader();
-    this.view.renderCalendar();
+    this.view.initCalendar();
+
+    this.dateSubscription = this.calendar
+      .getDateAsObservable()
+      .subscribe((date: Date) => {
+        this.view.renderHeader(date);
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.dateSubscription) {
+      this.dateSubscription.unsubscribe();
+    }
   }
 }
