@@ -3,6 +3,11 @@
 .wrapper {
   display: grid;
   height: inherit;
+  position: absolute;
+  top: 64px;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 // ===========================================================================
@@ -31,7 +36,6 @@
   grid-template-rows: repeat(24, 48px);
   grid-template-columns: [time-column] 48px repeat(7, 1fr [day-column]);
   overflow-y: scroll;
-  margin-bottom: 65px;
 }
 
 .date-info-container {
@@ -64,7 +68,7 @@
   align-items: center;
 }
 
-.cell {
+:host ::ng-deep .cell {
   display: flex;
   width: 100%;
   align-self: center;
@@ -82,7 +86,7 @@
   justify-self: flex-end;
 }
 
-.time-cell {
+:host ::ng-deep .time-cell {
   align-self: flex-end;
   justify-self: flex-end;
   margin-bottom: -6px;
@@ -100,7 +104,7 @@
 // Misc.
 // ===========================================================================
 
-.time-offset-label {
+.timezone-offset-label {
   color: #70757a;
   font-size: 10px;
 }
