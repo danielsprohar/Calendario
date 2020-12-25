@@ -17,13 +17,13 @@
 .header {
   display: grid;
   grid-template-columns: [time-column] 48px repeat(7, 1fr [day-column]);
-  padding-right: 17px;
+  padding-right: 16.75px;
 }
 
 .all-day-events-container {
   display: grid;
   grid-template-columns: [time-column] 48px repeat(7, 1fr [day-column]);
-  padding-right: 17px;
+  padding-right: 16.75px;
   border-bottom: 1px solid #dadce0;
 }
 
@@ -87,9 +87,9 @@
 }
 
 :host ::ng-deep .time-cell {
-  align-self: flex-end;
+  align-self: flex-start;
   justify-self: flex-end;
-  margin-bottom: -6px;
+  margin-top: -10px;
   color: #70757a;
   font-size: 10px;
   padding-right: 0.25rem;
@@ -130,7 +130,7 @@
   height: 22px;
 }
 
-.day-name {
+.weekday {
   color: #70757a;
   text-transform: uppercase;
   font-size: 11px;
@@ -139,7 +139,7 @@
   text-indent: 2px;
 }
 
-.day-date {
+.day {
   color: #70757a;
   text-align: center;
   font-size: 24px;

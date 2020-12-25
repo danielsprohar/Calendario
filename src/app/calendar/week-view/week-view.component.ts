@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CalendarService } from 'src/app/services/calendar.service';
 import { WeekViewBuilder } from '../builders/week-view-builder';
+import { CalendarService } from '../services/calendar.service';
 
 @Component({
   selector: 'app-week-view',
@@ -17,7 +17,8 @@ export class WeekViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.vb.buildTimezoneOffset();
-    this.vb.buildCalendar();
+    this.vb.renderTimezoneOffset();
+    this.vb.renderHeader();
+    this.vb.renderCalendar();
   }
 }

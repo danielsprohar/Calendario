@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { distinct, shareReplay } from 'rxjs/operators';
-import { daysInMonth } from '../calendar/constants/days-in-month';
-import { CalendarEvent } from '../calendar/models/calendar-event';
-import { DateSegments } from '../calendar/models/date-segments.model';
+import { daysInMonth } from '../constants/days-in-month';
+import { CalendarEvent } from '../models/calendar-event';
+import { DateSegments } from '../models/date-segments.model';
 
 export const millisecondsPerHour = 3600000;
 export const millisecondsPerDay = 86400000;
@@ -249,7 +249,7 @@ export class CalendarService {
    *
    * @param date The date of interest.
    */
-  public getStartDateOfWeek(date = new Date()): Date {
+  public getFirstDateOfWeek(date = new Date()): Date {
     const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const delta = d.getDay() * millisecondsPerDay;
     return new Date(d.getTime() - delta);
@@ -287,7 +287,7 @@ export class CalendarService {
     if (this.isCurrentWeek()) {
       return;
     }
-    this.setDate(this.getStartDateOfWeek(this.dateSubject.value));
+    this.setDate(this.getFirstDateOfWeek(this.dateSubject.value));
   }
 
   /**
@@ -299,7 +299,7 @@ export class CalendarService {
     const previousWeek = new Date(
       this.dateSubject.value.getTime() - millisecondsPerWeek
     );
-    this.setDate(this.getStartDateOfWeek(previousWeek));
+    this.setDate(this.getFirstDateOfWeek(previousWeek));
   }
 
   /**
@@ -311,7 +311,7 @@ export class CalendarService {
     const nextWeek = new Date(
       this.dateSubject.value.getTime() + millisecondsPerWeek
     );
-    this.setDate(this.getStartDateOfWeek(nextWeek));
+    this.setDate(this.getFirstDateOfWeek(nextWeek));
   }
 
   /**
@@ -319,7 +319,7 @@ export class CalendarService {
    * @returns `true` if the rendered week is the current week, otherwise `false`.
    */
   public isCurrentWeek(): boolean {
-    const temp = this.getStartDateOfWeek(new Date());
+    const temp = this.getFirstDateOfWeek(new Date());
     const currentStartOfWeek = new Date(
       temp.getFullYear(),
       temp.getMonth(),

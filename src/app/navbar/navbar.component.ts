@@ -6,7 +6,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CalendarService } from '../services/calendar.service';
+import { CalendarService } from '../calendar/services/calendar.service';
 
 @Component({
   selector: 'app-navbar',
