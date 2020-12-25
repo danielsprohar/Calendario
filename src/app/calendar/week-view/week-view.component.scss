@@ -1,0 +1,146 @@
+@import "../../../sass/main.scss";
+
+.wrapper {
+  display: grid;
+  height: inherit;
+}
+
+// ===========================================================================
+// Containers
+// ===========================================================================
+
+.header {
+  display: grid;
+  grid-template-columns: [time-column] 48px repeat(7, 1fr [day-column]);
+  padding-right: 17px;
+}
+
+.all-day-events-container {
+  display: grid;
+  grid-template-columns: [time-column] 48px repeat(7, 1fr [day-column]);
+  padding-right: 17px;
+  border-bottom: 1px solid #dadce0;
+}
+
+.all-day-events-container > .all-day-event-cell:last-child {
+  border-right: none;
+}
+
+.calendar-container {
+  display: grid;
+  grid-template-rows: repeat(24, 48px);
+  grid-template-columns: [time-column] 48px repeat(7, 1fr [day-column]);
+  overflow-y: scroll;
+  margin-bottom: 65px;
+}
+
+.date-info-container {
+  font-weight: 400;
+  text-align: center;
+  width: 100%;
+}
+
+.day-date-container {
+  width: 100%;
+}
+
+// ===========================================================================
+// Cells
+// ===========================================================================
+
+.header-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 0.25rem;
+}
+
+.header-cell > h2 {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cell {
+  display: flex;
+  width: 100%;
+  align-self: center;
+  justify-self: center;
+  min-width: 80px;
+  min-height: 48px;
+  border: 1px solid #dadce0;
+  cursor: pointer;
+  position: relative;
+}
+
+.time-offset-cell {
+  padding-right: 0.25rem;
+  align-self: flex-end;
+  justify-self: flex-end;
+}
+
+.time-cell {
+  align-self: flex-end;
+  justify-self: flex-end;
+  margin-bottom: -6px;
+  color: #70757a;
+  font-size: 10px;
+  padding-right: 0.25rem;
+}
+
+.all-day-event-cell {
+  border-bottom: none;
+  border-top: none;
+}
+
+// ===========================================================================
+// Misc.
+// ===========================================================================
+
+.time-offset-label {
+  color: #70757a;
+  font-size: 10px;
+}
+
+.event {
+  flex: 1;
+  background-color: $primary-color;
+  color: #fff;
+  white-space: nowrap;
+  padding: 2px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  border: transparent;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.all-day-event {
+  height: 22px;
+}
+
+.day-name {
+  color: #70757a;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-indent: 2px;
+}
+
+.day-date {
+  color: #70757a;
+  text-align: center;
+  font-size: 24px;
+}
+
+.is-future-date {
+  color: #3c4043;
+}
