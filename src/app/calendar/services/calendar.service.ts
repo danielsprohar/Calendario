@@ -51,6 +51,19 @@ export class CalendarService {
   // =========================================================================
 
   /**
+   * Checks to see if the underlying `date` value is the current date.
+   */
+  public isCurrentDate(): boolean {
+    const today = new Date();
+    const date = this.getDate();
+    return (
+      date.getFullYear() === today.getFullYear() &&
+      date.getMonth() === today.getMonth() &&
+      date.getDate() === today.getDate()
+    );
+  }
+
+  /**
    * Compares the `date`, `month`, and `year` values
    * of the underlying `Date` value and the `Date` provided.
    * @param other The date of interest.
@@ -65,7 +78,10 @@ export class CalendarService {
   }
 
   /**
-   * Compares the `date`, `month`, and `year` values
+   * Checks if the given dates are on the same day.
+   *
+   * In other words, this compares the
+   * `date`, `month`, and `year` values
    * of the `Date`s provided.
    * @param a A date of interest.
    * @param b A date of interest.
@@ -96,28 +112,6 @@ export class CalendarService {
    */
   public isMonthView(value: boolean): void {
     this.isMonthViewSubject.next(value);
-  }
-
-  // =========================================================================
-
-  public isWeekViewAsObservable(): Observable<boolean> {
-    return this.isWeekViewSubject.asObservable();
-  }
-
-  /**
-   * Returns `true` if the WeeklyViewComponent is currently visible to the user,
-   * otherwise `false`.
-   */
-  public isWeekViewVisible(): boolean {
-    return this.isWeekViewSubject.value;
-  }
-
-  /**
-   * Sets the underlying `isMonthViewSubject` value with the given value.
-   * @param value The boolean value
-   */
-  public isWeekView(value: boolean): void {
-    this.isWeekViewSubject.next(value);
   }
 
   /**
@@ -165,24 +159,6 @@ export class CalendarService {
     }
 
     return `${startTime} - ${endTime}`;
-  }
-
-  /**
-   * Checks to see if the given `event` is an "all-day event."
-   *
-   * An "all-day event" is defined to be an event
-   * where the event's start time & end time equal 00:00;
-   * @param event The event of interest.
-   */
-  public isAllDayEvent(event: CalendarEvent): boolean {
-    const start = new Date(event.startDate);
-    const end = new Date(event.endDate);
-
-    return (
-      start.getHours() === end.getHours() &&
-      start.getHours() === 0 &&
-      end.getHours() === 0
-    );
   }
 
   // =========================================================================
@@ -247,6 +223,26 @@ export class CalendarService {
   // =========================================================================
   // Week operations
   // =========================================================================
+
+  public isWeekViewAsObservable(): Observable<boolean> {
+    return this.isWeekViewSubject.asObservable();
+  }
+
+  /**
+   * Returns `true` if the WeeklyViewComponent is currently visible to the user,
+   * otherwise `false`.
+   */
+  public isWeekViewVisible(): boolean {
+    return this.isWeekViewSubject.value;
+  }
+
+  /**
+   * Sets the underlying `isMonthViewSubject` value with the given value.
+   * @param value The boolean value
+   */
+  public isWeekView(value: boolean): void {
+    this.isWeekViewSubject.next(value);
+  }
 
   /**
    * Returns a new `Date` object that represents
@@ -367,15 +363,30 @@ export class CalendarService {
   }
 
   /**
-   * Checks to see if the underlying `date` value is the current date.
+   * Checks to see if the given `event` is an "all-day event."
+   *
+   * An "all-day event" is defined to be an event
+   * where the event's start time & end time equal 00:00;
+   * @param event The event of interest.
    */
-  public isCurrentDate(): boolean {
-    const today = new Date();
-    const date = this.getDate();
+  public isAllDayEvent(event: CalendarEvent): boolean {
+    const start = new Date(event.startDate);
+    const end = new Date(event.endDate);
+
     return (
-      date.getFullYear() === today.getFullYear() &&
-      date.getMonth() === today.getMonth() &&
-      date.getDate() === today.getDate()
+      start.getHours() === end.getHours() &&
+      start.getHours() === 0 &&
+      end.getHours() === 0
     );
+  }
+
+  /**
+   * Checks if the given event has a time duration greater than one hour.
+   * @param event The event of interest.
+   */
+  public isMultiHourEvent(event: CalendarEvent): boolean {
+    const s = new Date(event.startDate);
+    const e = new Date(event.endDate);
+    return this.isSameDates(s, e) && s.getHours() < e.getHours();
   }
 }

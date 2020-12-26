@@ -66,16 +66,31 @@ export class WeekViewRenderer {
    * and the current days in numeric format (e.g., 1, 2, 3, etc.).
    */
   renderHeader(date: Date = new Date()): void {
-    const d = this.calendar.getFirstDateOfWeek(date);
+    const auxDate = this.calendar.getFirstDateOfWeek(date);
     const weekdays = document.querySelectorAll('.weekday');
     const days = document.querySelectorAll('.day');
+    const today = new Date();
 
+    // Remove the css stying for the current date
+    const day = document.querySelector('.is-current-date');
+    if (day) {
+      day.classList.remove('is-current-date');
+    }
+
+    // Now let's update the header
     for (let i = 0; i < daysPerWeek; i++) {
-      weekdays.item(i).textContent = this.weekdayFormatter.format(d);
+      weekdays.item(i).textContent = this.weekdayFormatter.format(auxDate);
       const day = days.item(i);
-      day.textContent = `${d.getDate()}`;
-      day.setAttribute('aria-label', this.ariaLabelFormatter.format(d));
-      d.setDate(d.getDate() + 1);
+      day.textContent = `${auxDate.getDate()}`;
+      day.setAttribute('aria-label', this.ariaLabelFormatter.format(auxDate));
+
+      if (auxDate.valueOf() > today.valueOf()) {
+        day.classList.add('is-future-date');
+      }
+      if (this.calendar.isSameDates(today, auxDate)) {
+        day.classList.add('is-current-date');
+      }
+      auxDate.setDate(auxDate.getDate() + 1);
     }
   }
 
@@ -109,11 +124,71 @@ export class WeekViewRenderer {
   }
 
   /**
+   * Renders the given event to the calendar.
+   *
+   * NOTE: This type of event should have a time duration of an hour or less.
+   * @param event The event details.
+   */
+  private renderEvent(event: CalendarEvent): void {
+    const date = new Date(event.startDate);
+    const cell = document.getElementById(`${date.getDay()}-${date.getHours()}`);
+    if (cell) {
+      cell.appendChild(this.builder.buildEvent(event));
+    }
+  }
+
+  /**
+   * Renders an all-day event to the calendar.
+   * @param event The event details.
+   */
+  private renderAllDayEvent(event: CalendarEvent): void {
+    const startDate = new Date(event.startDate);
+    const endDate = new Date(event.endDate);
+    let start = startDate.getDay();
+    const end = endDate.getDay();
+
+    while (start <= end) {
+      const cell = document.getElementById(`${start}`);
+      if (cell) {
+        cell.appendChild(this.builder.buildAllDayEvent(event));
+      }
+      start++;
+    }
+  }
+
+  /**
+   * Renders a multi-hour event to the calendar.
+   * @param event The event details.
+   */
+  private renderMultiHourEvent(event: CalendarEvent): void {
+    const date = new Date(event.startDate);
+    const cell = document.getElementById(`${date.getDay()}-${date.getHours()}`);
+    if (cell) {
+      cell.appendChild(this.builder.buildMultiHourEvent(event));
+    }
+  }
+
+  /**
    * Renders the given events to the calendar.
    * @param events The events to render.
    */
   renderEvents(events: CalendarEvent[]): void {
     this.clearCalendar();
-    // TODO: Update calendar.
+    if (events.length === 0) {
+      return;
+    }
+
+    // NOTE: Events are sorted in ascending order by their `startDate` property.
+    events.forEach((event: CalendarEvent) => {
+      if (this.calendar.isAllDayEvent(event)) {
+        // NOTE: All-day events have their starting & ending hour values set to 0.
+        this.renderAllDayEvent(event);
+      } else if (this.calendar.isMultiHourEvent(event)) {
+        this.renderMultiHourEvent(event);
+      } else {
+        // An event with a time duration of an hour or less
+        this.renderEvent(event);
+      }
+    });
   }
 }
