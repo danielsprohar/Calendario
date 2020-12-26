@@ -93,5 +93,20 @@ export class WeekViewRenderer {
     }
   }
 
-  updateCalendar(date: Date): void {}
+  updateCalendar(date: Date): void {
+    this.clearCalendar();
+    // TODO: Update calendar.
+  }
+
+  /**
+   * Clears the calendar of all its events.
+   */
+  private clearCalendar(): void {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach((cell: Element) => {
+      for (const child of Array.from(cell.children)) {
+        cell.removeChild(child);
+      }
+    });
+  }
 }
