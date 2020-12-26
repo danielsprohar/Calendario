@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WeekViewBuilder } from '../builders/week-view-builder';
+import { CalendarEvent } from '../models/calendar-event';
 import {
   CalendarService,
   daysPerWeek,
@@ -27,6 +28,20 @@ export class WeekViewRenderer {
     private readonly builder: WeekViewBuilder,
     private readonly calendar: CalendarService
   ) {}
+
+  /**
+   * Clears the calendar of all its events.
+   *
+   * NOTE: This method does not remove the events from the database.
+   */
+  private clearCalendar(): void {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach((cell: Element) => {
+      for (const child of Array.from(cell.children)) {
+        cell.removeChild(child);
+      }
+    });
+  }
 
   /**
    * Renders the timezone offset of the local computer to the calendar.
@@ -93,20 +108,12 @@ export class WeekViewRenderer {
     }
   }
 
-  updateCalendar(date: Date): void {
+  /**
+   * Renders the given events to the calendar.
+   * @param events The events to render.
+   */
+  renderEvents(events: CalendarEvent[]): void {
     this.clearCalendar();
     // TODO: Update calendar.
-  }
-
-  /**
-   * Clears the calendar of all its events.
-   */
-  private clearCalendar(): void {
-    const cells = document.querySelectorAll('.cell');
-    cells.forEach((cell: Element) => {
-      for (const child of Array.from(cell.children)) {
-        cell.removeChild(child);
-      }
-    });
   }
 }
