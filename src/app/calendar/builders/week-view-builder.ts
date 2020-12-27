@@ -37,11 +37,15 @@ export class WeekViewBuilder {
   }
 
   /**
-   * Builds a regular event. In other words, the event's time duration
+   * Builds a regular event in which the time duration
    * is an hour or less.
    * @param event The event details.
    */
-  public buildEvent(event: CalendarEvent): HTMLDivElement {
+  public buildEvent(event: CalendarEvent): HTMLDivElement | null {
+    if (!event.startDate || !event.endDate) {
+      return null;
+    }
+
     const start = new Date(event.startDate);
     const end = new Date(event.endDate);
 
@@ -85,14 +89,20 @@ export class WeekViewBuilder {
    * so the event can span across multiple rows.
    * @param event The event details
    */
-  public buildMultiHourEvent(event: CalendarEvent): HTMLDivElement {
+  public buildMultiHourEvent(event: CalendarEvent): HTMLDivElement | null {
+    if (!event.startDate || !event.endDate) {
+      return null;
+    }
+
     const start = new Date(event.startDate);
     const end = new Date(event.endDate);
-
     const eventElement = this.buildEvent(event);
-    const rowspan = end.getHours() - start.getHours() + 1;
-    const cellMinHeight = 48; // In pixels
+    if (!eventElement) {
+      return null;
+    }
 
+    const rowspan = end.getHours() - start.getHours();
+    const cellMinHeight = 48; // In pixels
     eventElement.classList.add('position-absolute');
     eventElement.style.bottom = `-${(rowspan - 1) * cellMinHeight}px`;
 

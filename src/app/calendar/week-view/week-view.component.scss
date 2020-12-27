@@ -107,6 +107,7 @@
   border-left: 1px solid #dadce0;
   cursor: pointer;
   position: relative;
+  min-height: auto;
 }
 
 // ===========================================================================
@@ -121,7 +122,8 @@
 :host ::ng-deep .event {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  // flex: 1;
+  width: 100%;
   background-color: $primary-color;
   color: #fff;
   white-space: nowrap;
@@ -132,7 +134,7 @@
   z-index: 1;
 }
 
-.position-absolute {
+:host ::ng-deep .position-absolute {
   position: absolute;
   top: 0;
   right: 0;
@@ -164,4 +166,19 @@
 :host ::ng-deep .is-current-date {
   background-color: $accent-color;
   color: #000;
+}
+
+:host ::ng-deep .holiday {
+  background-color: $holiday-color;
+  color: #fff;
+}
+
+:host ::ng-deep .every-weekend {
+  background-color: $every-weekend-color;
+  color: #fff;
+}
+
+:host ::ng-deep .every-weekday {
+  background-color: $every-weekday-color;
+  color: #fff;
 }

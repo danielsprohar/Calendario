@@ -365,14 +365,41 @@ export class CalendarService {
   /**
    * Checks to see if the given `event` is an "all-day event."
    *
-   * An "all-day event" is defined to be an event
-   * where the event's start time & end time equal 00:00;
+   * An "all-day event" is defined as:
+   *
+   * An event in which the `startDate` & `endDate` are `null`
+   * and repeat "every weekday" or "every weekend"
+   *
+   * OR
+   *
+   * An event in which the `startDate` is defined and
+   * the `endDate` is `null` and
+   * repeats "daily", "weekly", "monthly", or "annually"
+   *
+   * OR
+   *
+   * An event in which the start time & end time equal 00:00
    * @param event The event of interest.
    */
   public isAllDayEvent(event: CalendarEvent): boolean {
-    const start = new Date(event.startDate);
-    const end = new Date(event.endDate);
+    if (!event.startDate && !event.endDate) {
+      return (
+        event.repeats === 'every weekday' || event.repeats === 'every weekend'
+      );
+    }
 
+    if (event.startDate && !event.endDate) {
+      return (
+        event.repeats === 'daily' ||
+        event.repeats === 'weekly' ||
+        event.repeats === 'monthly' ||
+        event.repeats === 'annually'
+      );
+    }
+
+    // Added the "nullish coalescing operator" to silence the linter.
+    const start = new Date(event.startDate ?? 0);
+    const end = new Date(event.endDate ?? 1);
     return (
       start.getHours() === end.getHours() &&
       start.getHours() === 0 &&
@@ -385,8 +412,23 @@ export class CalendarService {
    * @param event The event of interest.
    */
   public isMultiHourEvent(event: CalendarEvent): boolean {
+    if (!event.startDate || !event.endDate) {
+      return false;
+    }
+
     const s = new Date(event.startDate);
     const e = new Date(event.endDate);
     return this.isSameDates(s, e) && s.getHours() < e.getHours();
+  }
+
+  /**
+   * Checks if the event occurs more than once.
+   *
+   * For example, if it repeats every weekday (e.g., "Go to the gym")
+   * or every weekend (e.g., "Read a chapter from book")
+   * @param event The event of interest.
+   */
+  public isRepeatingEvent(event: CalendarEvent): boolean {
+    return !event.startDate || !event.endDate;
   }
 }

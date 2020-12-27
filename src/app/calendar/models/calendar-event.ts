@@ -8,6 +8,7 @@ export const repeats = [
   'monthly',
   'annually',
   'every weekday',
+  'every weekend'
 ];
 export const defaultOccurrence = repeats[0];
 
@@ -16,8 +17,8 @@ export class CalendarEvent {
   title: string;
   status: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   isAllDay: boolean;
   repeats: string;
 

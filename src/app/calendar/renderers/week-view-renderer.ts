@@ -130,10 +130,53 @@ export class WeekViewRenderer {
    * @param event The event details.
    */
   private renderEvent(event: CalendarEvent): void {
+    if (!event.startDate) {
+      return;
+    }
     const date = new Date(event.startDate);
     const cell = document.getElementById(`${date.getDay()}-${date.getHours()}`);
     if (cell) {
-      cell.appendChild(this.builder.buildEvent(event));
+      const element = this.builder.buildEvent(event);
+      if (element) {
+        cell.appendChild(element);
+      }
+    }
+  }
+
+  /**
+   * Renders the event to the `all-day-container` element for Sunday & Saturday.
+   * @param event The event details.
+   */
+  private renderEveryWeekendEvent(event: CalendarEvent): void {
+    const sunday = document.getElementById(`${0}`);
+    if (sunday) {
+      const el = this.builder.buildAllDayEvent(event);
+      el.classList.add('every-weekend');
+      sunday.appendChild(el);
+    }
+    const saturday = document.getElementById(`${6}`);
+    if (saturday) {
+      const el = this.builder.buildAllDayEvent(event);
+      el.classList.add('every-weekend');
+      saturday.appendChild(el);
+    }
+  }
+
+  /**
+   * Renders the event to the `all-day-container` element
+   * for Monday-Friday.
+   */
+  private renderEveryWeekdayEvent(event: CalendarEvent): void {
+    let start = 1;
+    let end = 5;
+    while (start <= end) {
+      const cell = document.getElementById(`${start}`);
+      if (cell) {
+        const el = this.builder.buildAllDayEvent(event);
+        el.classList.add('every-weekday');
+        cell.appendChild(el);
+      }
+      start++;
     }
   }
 
@@ -142,17 +185,32 @@ export class WeekViewRenderer {
    * @param event The event details.
    */
   private renderAllDayEvent(event: CalendarEvent): void {
-    const startDate = new Date(event.startDate);
-    const endDate = new Date(event.endDate);
-    let start = startDate.getDay();
-    const end = endDate.getDay();
+    if (event.startDate && event.endDate) {
+      const startDate = new Date(event.startDate);
+      const endDate = new Date(event.endDate);
+      let start = startDate.getDay();
+      const end = endDate.getDay();
 
-    while (start <= end) {
-      const cell = document.getElementById(`${start}`);
+      while (start <= end) {
+        const cell = document.getElementById(`${start}`);
+        if (cell) {
+          cell.appendChild(this.builder.buildAllDayEvent(event));
+        }
+        start++;
+      }
+    } else if (!event.startDate && !event.endDate) {
+      if (event.repeats === 'every weekday') {
+        this.renderEveryWeekdayEvent(event);
+      } else if (event.repeats === 'every weekend') {
+        this.renderEveryWeekendEvent(event);
+      }
+    } else if (event.startDate && !event.endDate) {
+      // This event must occur every day, week, month, or year
+      const start = new Date(event.startDate);
+      const cell = document.getElementById(`${start.getDay()}`);
       if (cell) {
         cell.appendChild(this.builder.buildAllDayEvent(event));
       }
-      start++;
     }
   }
 
@@ -161,10 +219,17 @@ export class WeekViewRenderer {
    * @param event The event details.
    */
   private renderMultiHourEvent(event: CalendarEvent): void {
+    if (!event.startDate) {
+      return;
+    }
+
     const date = new Date(event.startDate);
     const cell = document.getElementById(`${date.getDay()}-${date.getHours()}`);
     if (cell) {
-      cell.appendChild(this.builder.buildMultiHourEvent(event));
+      const element = this.builder.buildMultiHourEvent(event);
+      if (element) {
+        cell.appendChild(element);
+      }
     }
   }
 
@@ -185,7 +250,12 @@ export class WeekViewRenderer {
         this.renderAllDayEvent(event);
       } else if (this.calendar.isMultiHourEvent(event)) {
         this.renderMultiHourEvent(event);
-      } else {
+      }
+      // else if (this.calendar.isRepeatingEvent(event)) {
+      //   // How often does it occur?
+      //   this.renderRecurringEvent(event);
+      // }
+      else {
         // An event with a time duration of an hour or less
         this.renderEvent(event);
       }
