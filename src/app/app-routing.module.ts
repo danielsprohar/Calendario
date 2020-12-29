@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { WeekViewComponent } from './calendar/week-view/week-view.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 

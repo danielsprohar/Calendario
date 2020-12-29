@@ -385,9 +385,10 @@ export class CalendarService {
     if (!event.startDate && !event.endDate) {
       return (
         event.repeats === 'every weekday' || event.repeats === 'every weekend'
-      );
-    }
+        );
+      }
 
+      // TODO: This needs to be changed after redesigning the database schema.
     if (event.startDate && !event.endDate) {
       return (
         event.repeats === 'daily' ||

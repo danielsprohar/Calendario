@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { PaginatedResponse } from 'src/app/models/paginated-response.model';
 import { DataService } from 'src/app/services/data.service';
+import { EventDetailsComponent } from '../event-details/event-details.component';
 import { CalendarEvent } from '../models/calendar-event';
 import { WeekViewRenderer } from '../renderers/week-view-renderer';
 import { CalendarService } from '../services/calendar.service';
@@ -17,6 +18,7 @@ import { CalendarService } from '../services/calendar.service';
 export class WeekViewComponent implements OnInit, OnDestroy {
   private dateSubscription: Subscription;
   private eventsSubscription: Subscription;
+  private dialogSubscription: Subscription;
 
   public events: CalendarEvent[];
 
@@ -46,7 +48,14 @@ export class WeekViewComponent implements OnInit, OnDestroy {
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }
+    if (this.dialogSubscription) {
+      this.dialogSubscription.unsubscribe();
+    }
   }
+
+  // =========================================================================
+  //
+  // =========================================================================
 
   /**
    * Fetchs all the events of the given week in which the given date resides.
@@ -67,6 +76,49 @@ export class WeekViewComponent implements OnInit, OnDestroy {
       .subscribe((res: PaginatedResponse<CalendarEvent>) => {
         this.events = res.data;
         this.view.renderEvents(this.events);
+      });
+  }
+
+  /**
+   * Updates the event in the calendar.
+   * @param event The event details
+   */
+  private updateEvent(event: CalendarEvent): void {
+    console.log(event);
+    // TODO: Update the event in the calendar.
+  }
+
+  // =========================================================================
+  // Action handlers
+  // =========================================================================
+
+  /**
+   * Open a dialog with the selected event passed as the `data` field
+   * to the `EventDetailsComponent`.
+   * @param event The event that is selected by the user.
+   */
+  public openDialog(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.className !== 'event' && target.className !== 'event-details') {
+      return;
+    }
+
+    const selectedEvent = this.events.find(
+      (e) => e.id === target.parentElement?.id
+    );
+
+    const dialogRef = this.dialog.open(EventDetailsComponent, {
+      data: selectedEvent,
+      maxHeight: '95%',
+      height: 'fit-content',
+    });
+
+    this.dialogSubscription = dialogRef
+      .afterClosed()
+      .subscribe((result: CalendarEvent) => {
+        if (result) {
+          this.updateEvent(result);
+        }
       });
   }
 }

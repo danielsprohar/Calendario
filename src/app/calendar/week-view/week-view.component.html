@@ -10,44 +10,44 @@
       <h2 class="date-info-container">
         <div class="weekday">Sun</div>
         <div class="day-container">
-          <button mat-button role="link" class="day"></button>
+          <button tabindex="0" mat-button role="link" class="day"></button>
         </div>
       </h2>
     </div>
     <div class="header-cell">
       <h2 class="date-info-container">
         <div class="weekday"></div>
-        <button mat-button role="link" class="day"></button>
+        <button tabindex="0" mat-button role="link" class="day"></button>
       </h2>
     </div>
     <div class="header-cell">
       <h2 class="date-info-container">
         <div class="weekday"></div>
-        <button mat-button role="link" class="day"></button>
+        <button tabindex="0" mat-button role="link" class="day"></button>
       </h2>
     </div>
     <div class="header-cell">
       <h2 class="date-info-container">
         <div class="weekday"></div>
-        <button mat-button role="link" class="day"></button>
+        <button tabindex="0" mat-button role="link" class="day"></button>
       </h2>
     </div>
     <div class="header-cell">
       <h2 class="date-info-container">
         <div class="weekday"></div>
-        <button mat-button role="link" class="day"></button>
+        <button tabindex="0" mat-button role="link" class="day"></button>
       </h2>
     </div>
     <div class="header-cell">
       <h2 class="date-info-container">
         <div class="weekday"></div>
-        <button mat-button role="link" class="day"></button>
+        <button tabindex="0" mat-button role="link" class="day"></button>
       </h2>
     </div>
     <div class="header-cell">
       <h2 class="date-info-container">
         <div class="weekday"></div>
-        <button mat-button role="link" class="day"></button>
+        <button tabindex="0" mat-button role="link" class="day"></button>
       </h2>
     </div>
   </div>
@@ -55,7 +55,7 @@
   <!-- ================================================== -->
   <!-- All-day events container -->
   <!-- ================================================== -->
-  <div class="all-day-events-container">
+  <div class="all-day-events-container" (click)="openDialog($event)">
     <div class="time-offset-cell">
       <span id="timezoneOffset" class="timezone-offset-label">GMT</span>
     </div>
@@ -75,5 +75,5 @@
   <!-- ================================================== -->
   <!-- Calendar content -->
   <!-- ================================================== -->
-  <div id="calendar" class="calendar-container"></div>
+  <div id="calendar" class="calendar-container" (click)="openDialog($event)"></div>
 </div>

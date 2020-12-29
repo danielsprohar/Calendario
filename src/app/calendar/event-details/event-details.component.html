@@ -1,0 +1,151 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title>Event details</h2>
+  <span class="spacer"></span>
+  <button
+    mat-icon-button
+    class="close-btn"
+    aria-label="Cancel event creation"
+    matTooltip="Cancel event creation"
+    matTooltipPosition="before"
+    tabindex="0"
+    (click)="onNoClick()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="mat-typography">
+  <div>
+    <form [formGroup]="form">
+      <!-- ======================================== -->
+      <!-- Event title -->
+      <!-- ======================================== -->
+      <mat-form-field class="title-field">
+        <mat-label>Title</mat-label>
+        <input
+          cdkFocusInitial
+          formControlName="title"
+          matInput
+          placeholder="Title"
+        />
+      </mat-form-field>
+
+      <!-- ======================================== -->
+      <!-- Date & time values -->
+      <!-- ======================================== -->
+      <div id="datetimeContainer" class="horizontal-form-fields">
+        <!-- ====================================================== -->
+        <!-- Starting date & time -->
+        <!-- ====================================================== -->
+        <mat-form-field appearance="fill" class="date-field">
+          <input
+            matInput
+            formControlName="startDate"
+            [matDatepicker]="startDatePicker"
+            autocomplete="off"
+            tabindex="0"
+            (click)="startDatePicker.open()"
+            aria-label="The date the event begins."
+          />
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="time-field">
+          <input
+            matInput
+            formControlName="startTime"
+            autocomplete="off"
+            aria-label="The time the event begins"
+          />
+        </mat-form-field>
+
+        <span>&nbsp;to&nbsp;</span>
+
+        <!-- ====================================================== -->
+        <!-- Ending date & time -->
+        <!-- ====================================================== -->
+        <mat-form-field appearance="fill" class="time-field end-time">
+          <input
+            matInput
+            formControlName="endTime"
+            autocomplete="off"
+            aria-label="The time the event ends"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="date-field">
+          <input
+            matInput
+            formControlName="endDate"
+            [matDatepicker]="endDatePicker"
+            autocomplete="off"
+            tabindex="0"
+            (click)="endDatePicker.open()"
+            aria-label="The date the event ends"
+          />
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <!-- ======================================== -->
+      <!-- How often does this event occur? -->
+      <!-- ======================================== -->
+      <div class="horizontal-form-fields">
+        <mat-checkbox
+          #allDayCheckbox
+          formControlName="isAllDay"
+          color="primary"
+          (change)="toggleDatetimeFields(allDayCheckbox.checked)"
+        >
+          All day
+        </mat-checkbox>
+
+        <mat-form-field appearance="fill" class="select">
+          <mat-select
+            formControlName="repeats"
+            aria-label="How often should this event repeat?"
+          >
+            <mat-option *ngFor="let value of repeatsOptions" [value]="value">
+              {{ value | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="select">
+          <mat-select
+            formControlName="status"
+            aria-label="Are you available to do other things?"
+          >
+            <mat-option *ngFor="let status of statusOptions" [value]="status">
+              {{ status | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- ======================================== -->
+      <!-- Description -->
+      <!-- ======================================== -->
+      <div>
+        <mat-form-field appearance="fill" class="description-field">
+          <textarea
+            matInput
+            formControlName="description"
+            placeholder="Add description"
+            aria-label="Add description"
+            rows="10"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- ======================================== -->
+      <!-- Actions -->
+      <!-- ======================================== -->
+      <div mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="onSave()">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>

@@ -65,3 +65,15 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+// The close button styling for a dialog/modal
+.close-btn {
+  color: #5f6368;
+  fill: #5f6368;
+  opacity: 1;
+  margin-right: -12px !important;
+}
+
+.hidden {
+  display: none !important;
+}

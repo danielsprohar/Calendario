@@ -1,0 +1,130 @@
+.dialog-container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-container > h2 {
+  margin: 0;
+}
+
+.mat-dialog-content {
+  overflow: initial;
+}
+
+.event-details-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1rem 0.5rem;
+}
+
+:host ::ng-deep .horizontal-form-fields {
+  display: flex;
+  flex-flow: row nowrap;
+  flex: 1;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+:host ::ng-deep .horizontal-form-fields .mat-form-field {
+  margin-right: 0;
+}
+
+.mat-checkbox {
+  margin-right: 1rem;
+}
+
+.description-field {
+  width: 100%;
+}
+
+.title-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.title-field .mat-form-field {
+  width: inherit;
+}
+
+// ==================================================================
+// Select element
+// ==================================================================
+
+.select {
+  margin-left: 1rem;
+}
+
+:host ::ng-deep .select .mat-form-field {
+  height: 40px;
+}
+
+:host ::ng-deep .select .mat-form-field-wrapper > * {
+  height: 36px;
+  padding-bottom: 0;
+}
+
+:host ::ng-deep .select .mat-form-field-flex {
+  padding: 0 0 0 0.25rem !important;
+}
+
+:host ::ng-deep .mat-select .mat-select-arrow-wrapper {
+  vertical-align: bottom;
+  padding-right: 0.25rem;
+}
+
+// ==================================================================
+// Date fields
+// ==================================================================
+
+:host ::ng-deep .date-field {
+  height: 40px;
+  margin-right: 0.5rem;
+  text-align: center;
+  width: 99px;
+}
+
+:host ::ng-deep .date-field .mat-form-field {
+  height: 40px;
+}
+
+:host ::ng-deep .date-field .mat-form-field-wrapper > * {
+  height: 36px;
+  width: 99px;
+  padding-bottom: 0;
+}
+
+:host ::ng-deep .date-field .mat-form-field-flex {
+  padding: 0 0 0 0.25rem !important;
+}
+
+// ==================================================================
+// Time fields
+// ==================================================================
+
+:host ::ng-deep .time-field {
+  height: 40px;
+  text-align: center;
+  width: 99px;
+}
+
+:host ::ng-deep .end-time {
+  margin-right: 0.5rem;
+}
+
+:host ::ng-deep .time-field .mat-form-field {
+  height: 40px;
+}
+
+:host ::ng-deep .time-field .mat-form-field-wrapper > * {
+  height: 36px;
+  width: 99px;
+  padding-bottom: 0;
+}
+
+:host ::ng-deep .time-field .mat-form-field-flex {
+  padding: 0 0 0 0.25rem !important;
+}
