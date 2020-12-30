@@ -113,7 +113,7 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public renderCurrentDate(): void {
     if (!this.calendar.isEqual(new Date())) {
-      this.calendar.setDate(new Date());
+      this.calendar.setDate(this.calendar.getFirstDateOfWeek(new Date()));
     }
   }
 

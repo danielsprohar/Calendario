@@ -129,7 +129,7 @@ export class WeekViewRenderer {
    * NOTE: This type of event should have a time duration of an hour or less.
    * @param event The event details.
    */
-  private renderEvent(event: CalendarEvent): void {
+  public renderEvent(event: CalendarEvent): void {
     if (!event.startDate) {
       return;
     }

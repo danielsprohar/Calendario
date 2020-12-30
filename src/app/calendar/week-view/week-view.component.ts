@@ -7,7 +7,10 @@ import { DataService } from 'src/app/services/data.service';
 import { EventDetailsComponent } from '../event-details/event-details.component';
 import { CalendarEvent } from '../models/calendar-event';
 import { WeekViewRenderer } from '../renderers/week-view-renderer';
-import { CalendarService } from '../services/calendar.service';
+import {
+  CalendarService,
+  millisecondsPerHour,
+} from '../services/calendar.service';
 
 @Component({
   selector: 'app-week-view',
@@ -88,6 +91,55 @@ export class WeekViewComponent implements OnInit, OnDestroy {
     // TODO: Update the event in the calendar.
   }
 
+  /**
+   * Creates a new event in the calendar
+   */
+  private createEvent(date: Date): void {
+    date = new Date(date);
+    const dialogRef = this.dialog.open(EventDetailsComponent, {
+      data: new CalendarEvent({
+        startDate: date,
+        endDate: new Date(date.getTime() + millisecondsPerHour),
+      }),
+      maxHeight: '95%',
+      height: 'fit-content',
+    });
+
+    this.dialogSubscription = dialogRef
+      .afterClosed()
+      .subscribe((result: CalendarEvent) => {
+        if (result) {
+          this.view.renderEvent(result);
+          this.events.push(result);
+        }
+      });
+  }
+
+  /**
+   * Parses the cell `id` for the selected date
+   * in which the new event should be created.
+   * @param id The id value of the selected cell inside the calendar
+   */
+  private getDateFromId(id: string): Date {
+    let date = new Date(this.calendar.getDate());
+    const tokens = id.split('-');
+    if (!tokens) {
+      throw new Error('Invalid format for cell "id"');
+    }
+
+    try {
+      const day = +tokens[0];
+      const hour = +tokens[1];
+      date = new Date(date.setDate(date.getDate() + day));
+      date = this.calendar.setZeroHour(date);
+      date.setHours(hour);
+      return date;
+    } catch (e) {
+      // Invalid cast exception when casting the strings to numbers
+      throw new Error('Invalid "id" values');
+    }
+  }
+
   // =========================================================================
   // Action handlers
   // =========================================================================
@@ -99,26 +151,29 @@ export class WeekViewComponent implements OnInit, OnDestroy {
    */
   public openDialog(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (target.className !== 'event' && target.className !== 'event-details') {
-      return;
-    }
+    if (target.className === 'cell') {
+      this.createEvent(this.getDateFromId(target.id));
+    } else if (
+      target.className === 'event' ||
+      target.className === 'event-details'
+    ) {
+      const selectedEvent = this.events.find(
+        (e) => e.id === target.parentElement?.id
+      );
 
-    const selectedEvent = this.events.find(
-      (e) => e.id === target.parentElement?.id
-    );
-
-    const dialogRef = this.dialog.open(EventDetailsComponent, {
-      data: selectedEvent,
-      maxHeight: '95%',
-      height: 'fit-content',
-    });
-
-    this.dialogSubscription = dialogRef
-      .afterClosed()
-      .subscribe((result: CalendarEvent) => {
-        if (result) {
-          this.updateEvent(result);
-        }
+      const dialogRef = this.dialog.open(EventDetailsComponent, {
+        data: selectedEvent,
+        maxHeight: '95%',
+        height: 'fit-content',
       });
+
+      this.dialogSubscription = dialogRef
+        .afterClosed()
+        .subscribe((result: CalendarEvent) => {
+          if (result) {
+            this.updateEvent(result);
+          }
+        });
+    }
   }
 }

@@ -10,6 +10,6 @@ export class AppComponent implements OnInit {
   constructor(private readonly calendar: CalendarService) {}
 
   ngOnInit(): void {
-    this.calendar.setDate(new Date());
+    this.calendar.setDate(this.calendar.getFirstDateOfWeek(new Date()));
   }
 }

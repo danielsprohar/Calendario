@@ -185,18 +185,11 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   // =========================================================================
 
   /**
-   * Since the `date` and `time` portions are provided from separate form fields
-   * an ISO conforming string must be constructed.
-   *
-   * Recall that an ISO datetime string has the following format:
-   *
-   * `YYYY-MM-DDTHH:MM:SS`
-   *
-   * For example, `2021-01-01T00:00:00`
+   * Creates a new instance of a `Date` from the given date & time values.
    * @param date The `date` portion of the datetime string to be constructed.
    * @param time The `time` portion of the datetime string to be constructed.
    */
-  private buildISODateTimeString(date: Date, time: string): string {
+  private buildDate(date: Date, time: string): Date {
     const timeTokens = time.split(':');
     let hour = +timeTokens[0];
     const minutes = timeTokens[1].split(' ')[0];
@@ -205,8 +198,14 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
       hour += 12;
     }
 
-    const dateSegment = new Date(date).toISOString().split('T')[0];
-    return `${dateSegment}T${hour}:${minutes}:00`;
+    date = new Date(date);
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      hour,
+      +minutes
+    );
   }
 
   /**
@@ -231,24 +230,21 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
    * and creates a new instance of a `CalendarEvent`.
    */
   private buildEventFromFormValues(): CalendarEvent {
-    const startDate = new Date(
-      this.buildISODateTimeString(this.startDate?.value, this.startTime?.value)
+    const startDate = this.buildDate(
+      this.startDate?.value,
+      this.startTime?.value
     );
-    const endDate = new Date(
-      this.buildISODateTimeString(this.endDate?.value, this.endTime?.value)
-    );
-
-    const occurrence =
-      this.repeats?.value === this.defaultRepeats
-        ? defaultOccurrence
-        : this.repeats?.value.trim();
+    const endDate = this.buildDate(this.endDate?.value, this.endTime?.value);
+    if (!this.repeats?.value) {
+      this.repeats?.setValue(this.defaultRepeats);
+    }
 
     const event = new CalendarEvent({
       id: this.data.id ?? undefined,
       title: this.title?.value.trim(),
       startDate,
       endDate,
-      repeats: occurrence,
+      repeats: this.repeats?.value,
       isAllDay: this.isAllDay?.value,
       status: this.status?.value,
       description: this.description?.value?.trim(),
@@ -284,14 +280,13 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
    */
   public onSave(): void {
     const event = this.buildEventFromFormValues();
-
-    if (this.data && this.isEventModified(event)) {
-      this.dataSubscription = this.dataService
-        .update(`/events/${this.data.id}`, event)
-        .subscribe();
-    } else {
+    if (this.data && !this.data.id) {
       this.dataSubscription = this.dataService
         .create('/events', event)
+        .subscribe();
+    } else if (this.data && this.isEventModified(event)) {
+      this.dataSubscription = this.dataService
+        .update(`/events/${event.id}`, event)
         .subscribe();
     }
 

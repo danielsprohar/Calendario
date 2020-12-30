@@ -20,7 +20,7 @@ export class CalendarEvent {
   startDate?: Date;
   endDate?: Date;
   isAllDay: boolean;
-  repeats: string;
+  repeats: string = 'never';
 
   constructor(fields?: {
     id?: string;
